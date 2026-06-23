@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Fee Payment | Apex Horizon Academy</title>
+  <meta name="description" content="Pay student tuition, activities, and bus transportation fees securely online using our student lookup and credit card terminal.">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="main.js"></script>
+</head>
+<body>
+
+  <!-- Header Navigation -->
+  <header>
+    <div class="container header-container">
+      <a href="index.html" class="logo" id="header-logo-link">
+        <div class="logo-icon">A</div>
+        <span>Apex Horizon</span>
+      </a>
+      
+      <button class="mobile-toggle" aria-label="Toggle Navigation" id="nav-toggle-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="navigation-menu">
+        <li><a href="index.html" id="nav-home">Home</a></li>
+        <li><a href="about.html" id="nav-about">About Us</a></li>
+        <li><a href="academics.html" id="nav-academics">Academics</a></li>
+        <li><a href="admissions.html" id="nav-admissions">Admissions</a></li>
+        <li><a href="contact.html" id="nav-contact">Contact</a></li>
+        <li><a href="pay.html" class="active" id="nav-pay">Pay Online</a></li>
+        <li><a href="admissions.html" class="btn btn-primary btn-sm" id="nav-apply-btn">Apply Now</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main style="padding-top: var(--header-height);">
+    <!-- Sub-Hero Section -->
+    <section class="section" style="background: radial-gradient(circle at 10% 20%, hsl(var(--primary-hue), 82%, 97%) 0%, var(--slate-50) 80%); padding: 80px 0;">
+      <div class="container">
+        <div class="fade-in" style="max-width: 700px;">
+          <span class="section-tag">Finance Portal</span>
+          <h1 class="section-title" style="font-size: 48px; margin-bottom: 20px;">Secure Online Payments</h1>
+          <p class="section-subtitle" style="font-size: 18px;">Verify student balances and process tuition payments securely. Our online payment terminal is fully encrypted and automated.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Payment Section -->
+    <section class="section">
+      <div class="container pay-grid">
+        <!-- Left Side: Invoice Lookups & Forms -->
+        <div>
+          <!-- Step 1: Lookup Student -->
+          <div class="card fade-in" style="background-color: var(--white); margin-bottom: 30px;">
+            <h2 style="font-size: 22px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+              <span style="width: 28px; height: 28px; border-radius: 50%; background-color: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 14px;">1</span>
+              Student Verification
+            </h2>
+            <p style="color: var(--slate-500); font-size: 14px; margin-bottom: 20px;">Enter your student's unique ID code to check current academic balances.</p>
+            
+            <form id="fee-lookup-form" style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="flex-grow: 1;">
+                <input type="text" id="student-id-input" class="form-input" style="background-color: var(--slate-50);" placeholder="e.g. APEX-101" required>
+                <div id="lookup-error" style="display: none; color: red; font-size: 13px; margin-top: 6px; font-weight: 500;">
+                  * Student ID not found. Try entering APEX-101, APEX-102, or APEX-103.
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" id="lookup-btn" style="padding: 13px 24px;">Verify ID</button>
+            </form>
+            
+            <div style="margin-top: 16px; font-size: 12px; background-color: var(--slate-100); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200); color: var(--slate-600);">
+              <strong>Mock Testing IDs:</strong> You can enter <code>APEX-101</code> (Alice Jenkins), <code>APEX-102</code> (Marcus Lee Jr.), <code>APEX-103</code> (Elena Rostova), or <code>APEX-104</code> (Ethan Carter).
+            </div>
+          </div>
+
+          <!-- Step 2: Invoice Summary -->
+          <div id="invoice-panel" class="invoice-card fade-in" style="display: none; margin-bottom: 30px;">
+            <div class="invoice-header">
+              <div>
+                <span class="invoice-title">Outstanding Invoice</span>
+                <p id="invoice-student-name" style="font-weight: 600; color: var(--slate-800); margin-top: 4px;">Student Name</p>
+                <p id="invoice-grade" style="font-size: 13px; color: var(--slate-500);">Grade Level</p>
+              </div>
+              <div style="text-align: right;">
+                <span class="invoice-number">INV-2026-8809</span>
+                <p style="font-size: 13px; color: var(--slate-500); margin-top: 4px;">Issued: June 2026</p>
+              </div>
+            </div>
+            
+            <div class="invoice-row">
+              <span style="color: var(--slate-600);">Academic Tuition Fees:</span>
+              <span id="invoice-base-val" style="font-weight: 600; color: var(--slate-900);">$0</span>
+            </div>
+            <div class="invoice-row">
+              <span style="color: var(--slate-600);">Registered Optional Services:</span>
+              <span id="invoice-addons-val" style="font-weight: 600; color: var(--slate-900);">$0</span>
+            </div>
+            <div class="invoice-row total">
+              <span>Total Outstanding Balance:</span>
+              <span id="invoice-total-val" class="val">$0</span>
+            </div>
+          </div>
+
+          <!-- Step 3: Checkout Details -->
+          <div id="payment-panel" class="card fade-in" style="display: none;">
+            <h2 style="font-size: 22px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+              <span style="width: 28px; height: 28px; border-radius: 50%; background-color: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 14px;">2</span>
+              Secure Card Details
+            </h2>
+
+            <!-- 3D Credit Card Visual Preview -->
+            <div class="card-wrapper">
+              <div class="card-preview">
+                <!-- Front -->
+                <div class="card-face card-front">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="card-chip"></div>
+                    <span class="card-brand">ApexPay</span>
+                  </div>
+                  <div class="card-number-display">•••• •••• •••• ••••</div>
+                  <div class="card-meta">
+                    <div>
+                      <div class="card-label">Cardholder</div>
+                      <div class="card-name-display">CARDHOLDER NAME</div>
+                    </div>
+                    <div>
+                      <div class="card-label">Expires</div>
+                      <div class="card-expiry-display">MM/YY</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Back -->
+                <div class="card-face card-back">
+                  <div class="card-strip"></div>
+                  <div class="card-ccv-area">
+                    <div class="card-label" style="text-align: right; margin-right: 10px; margin-bottom: 4px;">Security Code</div>
+                    <div class="card-signature"></div>
+                    <div class="card-cvv-display">•••</div>
+                  </div>
+                  <div style="padding: 0 24px; font-size: 8px; color: rgba(255,255,255,0.4); text-align: center;">
+                    This mock card visualizes input validations securely.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Details -->
+            <form id="payment-checkout-form">
+              <div class="form-group">
+                <label for="card-number-input" class="form-label">Credit Card Number</label>
+                <input type="text" id="card-number-input" class="form-input" placeholder="4111 2222 3333 4444" required>
+              </div>
+
+              <div class="form-group">
+                <label for="card-name-input" class="form-label">Cardholder Name</label>
+                <input type="text" id="card-name-input" class="form-input" placeholder="JOHN DOE" required>
+              </div>
+
+              <div class="grid-2" style="gap: 20px; margin-bottom: 24px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="card-expiry-input" class="form-label">Expiration Date</label>
+                  <input type="text" id="card-expiry-input" class="form-input" placeholder="MM/YY" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="card-cvv-input" class="form-label">CVV / CVN</label>
+                  <input type="password" id="card-cvv-input" class="form-input" placeholder="123" required>
+                </div>
+              </div>
+
+              <input type="hidden" id="payment-amount-input">
+
+              <button type="submit" class="btn btn-primary" id="checkout-submit-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Process Tuition Payment
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Side: Sidebar FAQ Details -->
+        <div class="fade-in delay-200" style="position: sticky; top: calc(var(--header-height) + 20px);">
+          <div class="card" style="background-color: var(--white);">
+            <h3 style="font-size: 18px; border-bottom: 1px solid var(--slate-200); padding-bottom: 12px; margin-bottom: 16px;">Payment Information</h3>
+            
+            <div style="margin-bottom: 20px;">
+              <h4 style="font-size: 15px; margin-bottom: 6px; color: var(--slate-900);">Is my online payment secure?</h4>
+              <p style="color: var(--slate-600); font-size: 13.5px; line-height: 1.5;">Yes. Transactions are fully encrypted using SSL, satisfying global payment gateway standards. No credit card information is cached or stored locally.</p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <h4 style="font-size: 15px; margin-bottom: 6px; color: var(--slate-900);">When will my account update?</h4>
+              <p style="color: var(--slate-600); font-size: 13.5px; line-height: 1.5;">Balances are updated immediately. A receipt and voucher confirmation will be dispatched automatically via email.</p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <h4 style="font-size: 15px; margin-bottom: 6px; color: var(--slate-900);">Are credit card fees added?</h4>
+              <p style="color: var(--slate-600); font-size: 13.5px; line-height: 1.5;">No. The academy covers processing overheads. The balance displayed on your invoice screen is the final payment amount.</p>
+            </div>
+
+            <div>
+              <h4 style="font-size: 15px; margin-bottom: 6px; color: var(--slate-900);">Need finance assistance?</h4>
+              <p style="color: var(--slate-600); font-size: 13.5px; line-height: 1.5;">Please contact the billing office at <strong>+1 (555) 123-4567</strong> or email <strong>billing@apexhorizon.edu</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Success Modal Overlay -->
+  <div class="success-overlay">
+    <div class="success-modal">
+      <div class="success-icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 style="font-family: var(--font-title); font-size: 26px; color: var(--slate-900); margin-bottom: 12px;">Payment Successful!</h2>
+      <p style="color: var(--slate-600); font-size: 15px; margin-bottom: 30px; line-height: 1.6;">Your tuition fees have been securely received. A confirmation voucher and billing invoice have been emailed to your primary contact email.</p>
+      <button class="btn btn-primary" id="close-success-btn" style="width: 100%;">Return to Account</button>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo" id="footer-logo-link">
+          <div class="logo-icon">A</div>
+          <span>Apex Horizon</span>
+        </a>
+        <p>Providing cutting-edge, values-based education to cultivate leadership, creativity, and service in tomorrow's innovators.</p>
+        <div class="social-links">
+          <a href="#" class="social-btn" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="academics.html">Academics</a></li>
+          <li><a href="admissions.html">Admissions</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="pay.html">Pay Online</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Academics</h4>
+        <ul class="footer-links">
+          <li><a href="academics.html#elementary">Elementary School</a></li>
+          <li><a href="academics.html#middle">Middle School</a></li>
+          <li><a href="academics.html#high">High School</a></li>
+          <li><a href="academics.html#stem">STEM Academy</a></li>
+          <li><a href="academics.html#arts">Arts Program</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Contact Info</h4>
+        <ul class="footer-contact">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>100 Apex Circle, Horizon Valley, CA 90210</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>+1 (555) 123-4567</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>admissions@apexhorizon.edu</span>
+          </li>
+        </ul>
+        <form class="newsletter-form" id="newsletter-form-footer">
+          <input type="email" placeholder="Subscribe to newsletter" aria-label="Email Address" required>
+          <button type="submit" aria-label="Subscribe">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <div>&copy; 2026 Apex Horizon Academy. All rights reserved.</div>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
